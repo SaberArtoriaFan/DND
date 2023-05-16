@@ -1,0 +1,16 @@
+{
+    "name": "Luban",
+    "rootNamespace": "",
+    "references": [
+        "GUID:265ab79482be69947bd691af843e47ce"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

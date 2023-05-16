@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7677860446360619278
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2363654963796673545, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_Name
+      value: "\u5973\u53CC\u5200\u8FDC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460306571567553642, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: attackVal
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: attackTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: health_Max
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: attackRange
+      value: 6.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: health_Curr
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: warningRange
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: attackAnimationLong
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.flySpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.modelName
+      value: Cyclone
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: passiveSkills.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.curve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.curve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.curve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.curve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585431617864704162, guid: 2a39ef1a085b4a6469022d7a968a36b6,
+        type: 3}
+      propertyPath: projectile.curve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a39ef1a085b4a6469022d7a968a36b6, type: 3}
