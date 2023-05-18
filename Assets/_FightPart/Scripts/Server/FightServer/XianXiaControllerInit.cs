@@ -7,6 +7,7 @@ using FishNet.Transporting;
 using Proto;
 using XianXia.Server;
 using FishNet.Managing;
+using FishNet.Connection;
 
 namespace XianXia
 {
@@ -60,17 +61,43 @@ namespace XianXia
                     //传给GameManager进行初始化场地，各项模组
                     //监听玩家上线，上线后开始战斗
                     //如果十秒内玩家没有上限则自动关闭
+                    #region 如果一定时间内没有玩家登陆就关闭
+                    NormalUtility normalUtility = InstanceFinder.GetInstance<NormalUtility>();
                     Timer l_timer =null;
                     l_timer= TimerManager.Instance.AddTimer(() =>
                     {
                         Request_CloseApplication();
-                    }, 10f);
-                    Action<FishNet.Connection.NetworkConnection> action1 = null;
-                    action1=(n) => {l_timer.Stop();
-                        InstanceFinder.GetInstance<NormalUtility>().SynchronizeResourcesEvent -= action1; 
+                    }, 15f);
+                    Action<FishNet.Connection.NetworkConnection,RemoteConnectionStateArgs> action1 = null;
+                    action1=(n,r) => {
+                        //FightServerClient.ConsoleWrite_Saber($"....didididid");
 
+                        if (r.ConnectionState == RemoteConnectionState.Started)
+                        {
+                            l_timer.Stop();
+                            FightServerClient.ConsoleWrite_Saber($"有玩家进入，取消自我关闭");
+                            InstanceFinder.ServerManager.OnRemoteConnectionState -= action1;
+                        }
                     };
-                    InstanceFinder.GetInstance<NormalUtility>().SynchronizeResourcesEvent += action1;
+                    InstanceFinder.ServerManager.OnRemoteConnectionState += action1;
+                    #endregion
+                    #region 如果玩家离线则关闭
+                    Action<NetworkConnection,RemoteConnectionStateArgs> action2 = null;
+                    action2 = (n,r) =>
+                    {
+                        //FightServerClient.ConsoleWrite_Saber($"....didididid");
+
+                        if (r.ConnectionState == RemoteConnectionState.Stopped)
+                        {
+                            FightServerClient.ConsoleWrite_Saber($"有客户端断开，连接断开");
+                            InstanceFinder.ServerManager.StopConnection(false);
+                        }    
+                    };
+                    InstanceFinder.ServerManager.OnRemoteConnectionState += action2;
+                    #endregion
+
+
+
                 }
                 else if (s.ConnectionState == FishNet.Transporting.LocalConnectionState.Stopped) 
                 { 

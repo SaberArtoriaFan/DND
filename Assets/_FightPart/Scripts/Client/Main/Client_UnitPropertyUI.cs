@@ -46,6 +46,7 @@ namespace XianXia
             {
                 GameObject GO = GameObject.Instantiate(model);
                 GO.transform.SetParent(healthMgiacPanel);
+                GO.transform.localScale = Vector3.one;
                 return GO.AddComponent<HealthMagicPointShowUI>();
             }, (u) =>
             {

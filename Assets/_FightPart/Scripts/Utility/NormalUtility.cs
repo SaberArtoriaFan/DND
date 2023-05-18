@@ -34,11 +34,12 @@ namespace XianXia
         float timeScale = 2;
         public event Action OnStartAfterNetwork;
         PoolManager poolManager;
+        public event Action<NetworkConnection> ClientOfflineEvent;
 #endif
 
         //NetworkUtility networkUtility;
 
-        public event Action<NetworkConnection> SynchronizeResourcesEvent;
+        public event Action<NetworkConnection> OnClientEnterEvent;
 
         public event Action<GameObject> UnitDeadClientAction;
 
@@ -71,7 +72,7 @@ namespace XianXia
         private void OnDestroy()
         {
             shapeShiftManager.OnDestroy();
-            SynchronizeResourcesEvent = null;
+            OnClientEnterEvent = null;
             UnitDeadClientAction = null;
         }
         //private void SynchronizeResources(NetworkConnection conn,bool res)
@@ -107,7 +108,7 @@ namespace XianXia
 #if UNITY_SERVER
             //Debug.Log("ddd");
             //this.GiveOwnership(conn);
-            SynchronizeResourcesEvent?.Invoke(conn);
+            OnClientEnterEvent?.Invoke(conn);
 #endif
         }
         [Server]
@@ -145,7 +146,7 @@ namespace XianXia
 #if UNITY_SERVER
             //if (InstanceFinder.ServerManager != null)
             //    InstanceFinder.ServerManager.OnAuthenticationResult -= SynchronizeResources;
-            SynchronizeResourcesEvent = null;
+            OnClientEnterEvent = null;
 #endif
         }
         public override void OnStartClient()
@@ -158,6 +159,11 @@ namespace XianXia
             shapeShiftManager.StartAfterNetwork();
             InitClient();
 #endif
+        }
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            ServerRpc_ClientOfflineEvent(InstanceFinder.ClientManager.Connection);
         }
         [Client]
         void InitClient()
@@ -238,7 +244,7 @@ namespace XianXia
             if (!poolManager.IsPoolAlive(name))
             {
                 GameObject go= AddSpawnablePrefabs(InstanceFinder.NetworkManager, path, name);
-                SynchronizeResourcesEvent += (n) => { /*Debug.Log(*//*InstanceFinder.GetInstance<NetworkUtility>().*/TRPC_AddSpawnablePrefabs(n, path, name); } ;
+                OnClientEnterEvent += (n) => { /*Debug.Log(*//*InstanceFinder.GetInstance<NetworkUtility>().*/TRPC_AddSpawnablePrefabs(n, path, name); } ;
                 ORPC_AddSpawnablePrefabs(path,name);
                 return poolManager.AddPool<GameObject>(() => { GameObject model = GameObject.Instantiate(go);model.name = name; return model; }, (u) => {  recycleAction?.Invoke(u); Despawn(u, DespawnType.Pool); u.SetActive(false); u.transform.SetParent(parent); }, (u) => { Spawn(u);initAction?.Invoke(u); }, name);
             }
@@ -442,6 +448,14 @@ namespace XianXia
 
 #endregion
 #region ÀΩ»À
+        [ServerRpc(RequireOwnership =false)]
+        private void ServerRpc_ClientOfflineEvent(NetworkConnection conn)
+        {
+#if UNITY_SERVER
+            ClientOfflineEvent?.Invoke(conn);
+
+#endif
+        }
         //ÃÌº” Ù–‘
         [ObserversRpc]
         private void ORPC_AddUnitProperty(NetworkObject networkObject)

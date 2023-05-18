@@ -10,6 +10,7 @@ namespace XianXia
 {
     public class FightServerClient 
     {
+        public event Action OnCloseSocketEvent;
         public static void ConsoleWrite_Saber(string s,ConsoleColor color=default)
         {
 #if UNITY_SERVER && !UNITY_EDITOR
@@ -80,6 +81,8 @@ namespace XianXia
                 }
 
                 socket.Close();
+                OnCloseSocketEvent?.Invoke();
+                OnCloseSocketEvent = null;
             }
         }
         private void StartReceive()

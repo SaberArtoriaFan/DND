@@ -51,10 +51,22 @@ namespace XianXia
         }
         public void StartWork()
         {
+
 #if UNITY_SERVER
-            serverClient.InitSocket("127.0.0.1", port);
+
             process = System.Diagnostics.Process.GetCurrentProcess();
             processId = process.Id;
+            serverClient.OnCloseSocketEvent += () =>
+            {
+                FightServerClient.ConsoleWrite_Saber("Close Socket XIXI");
+#if !UNITY_EDITOR
+
+                process.Kill();
+#endif
+
+            };
+            serverClient.InitSocket("127.0.0.1", port);
+
             FightServerClient.ConsoleWrite_Saber($"ProcessID:{processId}");
             XianXiaControllerInit.Request_StartFightFishNetServer();
             //GameManager.NewInstance.OnFinishGameEvent += () =>
@@ -67,7 +79,7 @@ namespace XianXia
             //MainPack mainPack = null;
             //mainPack.HeroAndPosList.
 #endif
-        }
+            }
         private void Start()
         {
             StartWork();
