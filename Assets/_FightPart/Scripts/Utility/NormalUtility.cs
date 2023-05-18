@@ -14,6 +14,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using XianXia;
+using XianXia.Unit;
 //using network
 namespace XianXia
 {
@@ -29,6 +30,8 @@ namespace XianXia
 #if UNITY_EDITOR || UNITY_SERVER
         //[SerializeField]
         //IStartAfterNetwork gameWorld;
+        [SerializeField]
+        float timeScale = 2;
         public event Action OnStartAfterNetwork;
         PoolManager poolManager;
 #endif
@@ -41,7 +44,7 @@ namespace XianXia
 
         public static ulong  GetId() 
         {
-            if (id + 1 == ulong.MaxValue)
+            if (id  == ulong.MaxValue)
                 id = 0;
             return id++;
         }
@@ -149,7 +152,7 @@ namespace XianXia
         {
             base.OnStartClient();
 #if !UNITY_SERVER
-
+            Client_InstanceFinder.GetInstance<Client_TimeScaleUI>().OnSetTimeScale+= ServerRpc_SetTimeScale;
             //networkUtility = InstanceFinder.GetInstance<NetworkUtility>();
             Client_InstanceFinder.StartAfterNetwork();
             shapeShiftManager.StartAfterNetwork();
@@ -341,6 +344,8 @@ namespace XianXia
         public void ServerRpc_SetTimeScale(float speed)
         {
 #if UNITY_SERVER
+            if (timeScale < 0) timeScale = 2;
+            if (speed > timeScale) speed = timeScale;
             Time.timeScale = speed;
 #endif
         }

@@ -10,7 +10,7 @@ namespace XianXia
         // Start is called before the first frame update
         protected virtual void Awake()
         {
-            if (!InstanceFinder.IsClient) { Destroy(this);return; }
+            //if (!InstanceFinder.IsClient) { Destroy(this);return; }
         }
         protected virtual void Start()
         {
@@ -27,7 +27,7 @@ namespace XianXia
         }
         protected virtual void OnDestroy()
         {
-            if (InstanceFinder.IsClient) Client_InstanceFinder.Logout<T>();
+            /*if (InstanceFinder.IsClient)*/ Client_InstanceFinder.Logout<T>();
         }
 
     }

@@ -240,9 +240,10 @@ namespace XianXia.Unit
 
             UpdateDynamicObstacleReal(GetGridItemByUnit(unitBase), false);
             RemoveUnitFromPos(unitBase);
+
             instance.TimerManagerSystem.AddTimer(() => {
                 Debug.Log("准备销毁" + go.name);
-                FightLog.Record($"玩家:{CampManager.GetPlayerEnum(playerMemeber)} 单位:{unitBase.gameObject.name},被移除出游戏");
+                FightLog.Record($"玩家:{CampManager.GetPlayerEnum(playerMemeber)} 单位:{go.name},被移除出游戏");
                 InstanceFinder.GetInstance<NormalUtility>().Server_DespawnAndRecycleModel(go, go.name);
                 /*go.SetActive(false);*/
             }, delay);

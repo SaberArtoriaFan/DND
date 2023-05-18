@@ -52,6 +52,8 @@ namespace XianXia
         [ServerRpc(RequireOwnership =false)]
         void Test1()
         {
+            FightServerClient.ConsoleWrite_Saber("双方开始交战！！！");
+            GameManager.Instance.ChangeGameStatus(GameManagerBase.GameStatus.Starting);
             InstanceFinder.GetInstance<TimingSystemUI>().StartTimer(180, 30);
             UnitMainSystem mainSystem = GameManager.MainWorld.FindSystem<UnitMainSystem>();
             Projectile projectile = new Projectile("Cyclone", 2, 0);

@@ -31,7 +31,7 @@ namespace XianXia
         private void Start()
         {
             //Console.WriteLine("Enter Offline Scene");
-            tugboat = GetComponentInParent<Tugboat>();
+            tugboat = InstanceFinder.NetworkManager.TransportManager.Transport as Tugboat;
 
 
 #if UNITY_SERVER

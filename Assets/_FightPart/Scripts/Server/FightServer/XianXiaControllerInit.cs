@@ -6,12 +6,13 @@ using UnityEngine;
 using FishNet.Transporting;
 using Proto;
 using XianXia.Server;
+using FishNet.Managing;
 
 namespace XianXia
 {
     public static class XianXiaControllerInit 
     {
-        static Timer timer;
+        //static Timer timer;
         public static void InitControllerManager(ControllerManager controllerManager)
         {
             controllerManager.AddRespondHandle(ActionCode.ReadyFightAction, Respond_StartFightFishNetServer);
@@ -24,14 +25,22 @@ namespace XianXia
         {
             Request_CloseApplication();
         }
+
+
+        static void Respond_StartFightFishNetServer(MainPack mainPack)
+        {
+            FightServerClient.ConsoleWrite_Saber("收到开启客户端消息，等待Fishnet初始化中");
+            FightServerManager.Instance.StartCoroutine(WaitForFishNetInit(()=>StartFightFishNetServer(mainPack)));
+        }
         /// <summary>
         /// 开启战斗服务器
         /// </summary>
         /// <param name="mainPack"></param>
-        static void Respond_StartFightFishNetServer(MainPack mainPack)
+        static void StartFightFishNetServer(MainPack mainPack)
         {
-            if (timer != null) timer.Stop();
-            timer = null;
+            InstanceFinder.ServerManager.SetStartOnHeadless(false);
+            //if (timer != null) timer.Stop();
+            //timer = null;
             if (mainPack.IpAndPortPack == null || string.IsNullOrEmpty(mainPack.IpAndPortPack.Ip)) { mainPack.ReturnCode = ReturnCode.Fail; return; }
 
             InstanceFinder.NetworkManager.TransportManager.Transport.SetServerBindAddress("Any", FishNet.Transporting.IPAddressType.IPv4);
@@ -76,16 +85,30 @@ namespace XianXia
             };
             InstanceFinder.ServerManager.OnServerConnectionState += action;
         }
+
+        static IEnumerator WaitForFishNetInit(Action action)
+        {
+            WaitUntil waitUntil = new WaitUntil(() =>
+              {
+                  return InstanceFinder.NetworkManager != null && InstanceFinder.NetworkManager.Initialized;
+              });
+            yield return waitUntil;
+
+            action?.Invoke();
+
+        }
+
         /// <summary>
         /// 登录失败直接注销
         /// </summary>
         /// <param name="mainPack"></param>
         static void Respond_Fail_Login(MainPack mainPack)
         {
-            if (timer == null) return;
-            Debug.Log("登录失败");
-            timer.Stop();
-            timer = null;
+            FightServerClient.ConsoleWrite_Saber("登录失败");
+
+            //if (timer == null) return;
+            //timer.Stop();
+            //timer = null;
             mainPack.ReturnCode = default;
             Request_CloseApplication();
             //Application.Quit();
@@ -130,11 +153,11 @@ namespace XianXia
             mainPack.ActionCode = ActionCode.Login;
             mainPack.Word = FightServerManager.Instance.ProcessId.ToString();
             FightServerManager.Instance.Send(mainPack);
-            if (timer != null) timer.Stop();
-            timer = TimerManager.Instance.AddTimer(() =>
-            {
-                Request_CloseApplication();
-            }, 10);
+            //if (timer != null) timer.Stop();
+            //timer = TimerManager.Instance.AddTimer(() =>
+            //{
+            //    Request_CloseApplication();
+            //}, 10);
 
         }
         /// <summary>

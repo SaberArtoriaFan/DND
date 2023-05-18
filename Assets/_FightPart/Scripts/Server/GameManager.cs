@@ -102,6 +102,9 @@ namespace XianXia
 
             };
 
+            TimerManager.instance.AddTimer(() => XianXiaControllerInit.Request_CloseApplication(new string[] { $"游戏已结束,结果为{GameManager.instance._GameResult}" }), 10);
+
+
 #if UNITY_SERVER
             //Console.WriteLine("Saber:Enter GameScene");
 #else

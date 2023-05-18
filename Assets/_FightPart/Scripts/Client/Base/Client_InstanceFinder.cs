@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace XianXia
 {
-    public class Client_InstanceFinder : AutoSingleton<Client_InstanceFinder>
+    public sealed class Client_InstanceFinder : Singleton<Client_InstanceFinder>
     {
         Dictionary<string, object> dict;
         protected override void Awake()

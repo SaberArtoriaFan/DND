@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using XianXia;
 
 public class PhoneTest : MonoBehaviour
 {
@@ -22,16 +23,17 @@ public class PhoneTest : MonoBehaviour
 #if !UNITY_EDITOR&&UNITY_SERVER
             Console.WriteLine("StartServer Succ");
             updater.mode = Updater.UpdateMode.Standalone;
-            updater.StartUpdate();
 #elif UNITY_EDITOR&&UNITY_SERVER
             updater.mode = Updater.UpdateMode.Simulate;
-            updater.StartUpdate();
 #elif (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
             updater.mode = Updater.UpdateMode.Remote;
 #else
             updater.mode = Updater.UpdateMode.Simulate;
 #endif
+            FightServerClient.ConsoleWrite_Saber($"热更新模式:{updater.mode.ToString()}");
+            updater.StartUpdate();
         }
+
     }
 
     private void ChangeMode()

@@ -45,12 +45,11 @@ namespace XianXia
         {
             base.Awake();
             DontDestroyOnLoad(this.gameObject);
-            InstanceFinder.ServerManager.SetStartOnHeadless(false);
             serverClient = new FightServerClient();
             InitControllerManager();
             serverClient.controllerManager = controllerManager;
         }
-        private void Start()
+        public void StartWork()
         {
 #if UNITY_SERVER
             serverClient.InitSocket("127.0.0.1", port);
@@ -58,10 +57,9 @@ namespace XianXia
             processId = process.Id;
             FightServerClient.ConsoleWrite_Saber($"ProcessID:{processId}");
             XianXiaControllerInit.Request_StartFightFishNetServer();
-            GameManager.NewInstance.OnFinishGameEvent += () =>
-            {
-                TimerManager.instance.AddTimer(()=>XianXiaControllerInit.Request_CloseApplication(new string[] {$"游戏已结束,结果为{GameManager.instance._GameResult}" }), 10);
-            };
+            //GameManager.NewInstance.OnFinishGameEvent += () =>
+            //{
+            //};
             //TimerManager.instance.AddTimer(() => {
             //    XianXiaControllerInit.
             //    Excess_LoginRequest();
@@ -69,6 +67,10 @@ namespace XianXia
             //MainPack mainPack = null;
             //mainPack.HeroAndPosList.
 #endif
+        }
+        private void Start()
+        {
+            StartWork();
         }
         [Button]
         void Test()
@@ -104,6 +106,10 @@ namespace XianXia
             //serverClient
             controllerManager?.Destroy();
             base.OnDestroy();
+#if UNITY_SERVER && !UNITY_EDITOR
+                        System.Diagnostics.Process.GetCurrentProcess().Kill();
+#endif
+
 
         }
         public void Send(MainPack mainPack)

@@ -136,6 +136,21 @@ namespace Saber.Base
                 v.gameObject.layer = layer;
             }
         }
+
+        public static Canvas GetMainCanvas()
+        {
+            Canvas mianCanvas = null;
+            Canvas[] canvas = GameObject.FindObjectsOfType<Canvas>();
+            foreach (Canvas c in canvas)
+            {
+                if (c.tag == "MainCanvas")
+                {
+                    mianCanvas = c;
+                    break;
+                }
+            }
+            return mianCanvas;
+        }
         //public static bool IsFaceTo(Vector3 forward, Vector3 dir, float limit = 0)
         //{
         //    //60度正前方

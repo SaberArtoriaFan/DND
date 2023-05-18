@@ -69,6 +69,16 @@ namespace XianXia
             if (socket != null && socket.Connected == true)
             {
                 ConsoleWrite_Saber("Close this Server");
+
+                try 
+                {
+                    XianXiaControllerInit.Request_CloseApplication(new string[] { "通讯异常" });
+                }
+                catch(Exception ex)
+                {
+                    ConsoleWrite_Saber($"申请关闭自己发生错误{ex.Message}");
+                }
+
                 socket.Close();
             }
         }
