@@ -433,6 +433,7 @@ namespace XianXia
             if (c != null) c.SetAnimatorParameter_Trigger(id);
 #endif
         }
+
         [ObserversRpc]
         public void ORPC_SpawnUnit(GameObject go)
         {
