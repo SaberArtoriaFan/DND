@@ -26,6 +26,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using XianXia;
 
 namespace JEngine.Core
 {
@@ -78,8 +79,11 @@ namespace JEngine.Core
             if (result)
             {
                 await AssetMgr.LoadSceneAsync(sceneName);
-                Debug.Log("成功进入热更场景");
+                Debug.Log("开始热更");
                 await InitJEngine.Instance.LoadHotUpdateCallback();
+                Debug.Log("完成热更");
+
+                //FightServerManager.Instance.StartWork();
             }
         }
 

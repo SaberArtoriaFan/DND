@@ -2,11 +2,11 @@
 using System.IO;
 using UnityEngine;
 using JEngine.Core;
-using JEngine.Helper;
 using System.Threading;
 using System.Threading.Tasks;
 using ILRuntime.Mono.Cecil.Pdb;
 using UnityEngine.Serialization;
+using JEngine.Helper;
 using AppDomain = ILRuntime.Runtime.Enviorment.AppDomain;
 
 public partial class InitJEngine : MonoBehaviour
