@@ -11,23 +11,7 @@ namespace XianXia
     public class FightServerClient 
     {
         public event Action OnCloseSocketEvent;
-        public static void ConsoleWrite_Saber(string s,ConsoleColor color=default)
-        {
-#if UNITY_SERVER && !UNITY_EDITOR
-        if (color==default||color == Console.ForegroundColor)
-            Console.WriteLine("Saber:" + s+"\t"+ DateTime.Now);
-        else
-        {
-            ConsoleColor origin = Console.ForegroundColor;
-                Console.ForegroundColor = color;
-            Console.WriteLine("Saber:" + s+"\t"+ DateTime.Now);
-                Console.ForegroundColor = origin;
 
-        }
-#elif UNITY_SERVER&&UNITY_EDITOR
-            Debug.Log(s);
-#endif
-        }
         // Start is called before the first frame update
         Socket socket;
         
@@ -49,7 +33,7 @@ namespace XianXia
                 socket.Connect(ip, port);
                 StartReceive();
                 //this.controllerManager = controllerManager;
-                ConsoleWrite_Saber("Connect to FightAllServer");
+                FightServerManager.ConsoleWrite_Saber("Connect to FightAllServer");
 
                 //XianXiaControllerInit.Excess_LoginRequest();
             }
@@ -69,15 +53,15 @@ namespace XianXia
         {
             if (socket != null && socket.Connected == true)
             {
-                ConsoleWrite_Saber("Close this Server");
+                FightServerManager.ConsoleWrite_Saber("Close this Server");
 
                 try 
                 {
-                    XianXiaControllerInit.Request_CloseApplication(new string[] { "通讯异常" });
+                    XianXiaControllerInit.Request_CloseApplication(ReturnCode.Zero,new string[] { "通讯异常" });
                 }
                 catch(Exception ex)
                 {
-                    ConsoleWrite_Saber($"申请关闭自己发生错误{ex.Message}");
+                    FightServerManager.ConsoleWrite_Saber($"申请关闭自己发生错误{ex.Message}");
                 }
 
                 socket.Close();
@@ -111,7 +95,7 @@ namespace XianXia
 
         private void HandleResponse(MainPack pack)
         {
-            ConsoleWrite_Saber("Receive Message,Action:" + pack.ActionCode.ToString()+pack.ReturnCode);
+            FightServerManager.ConsoleWrite_Saber("Receive Message,Action:" + pack.ActionCode.ToString()+pack.ReturnCode);
             controllerManager.AddPackToDeal(pack);
             //TcpManager.Instance.Response(pack);
         }
@@ -120,7 +104,7 @@ namespace XianXia
         {
             if (pack != null)
             {
-                FightServerClient.ConsoleWrite_Saber($"Send {pack.ActionCode}Action,ReturnResult=");
+                FightServerManager.ConsoleWrite_Saber($"Send {pack.ActionCode}Action,ReturnResult=");
 
                 socket.Send(LocalMessage.PackData(pack));
             }

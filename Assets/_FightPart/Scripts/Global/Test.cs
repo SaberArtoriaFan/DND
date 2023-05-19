@@ -1,14 +1,9 @@
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using XianXia.Unit;
-using Saber.Base;
 using Saber.Camp;
 using Saber.ECS;
 using UnityEngine.UI;
-using XianXia.Terrain;
-using System.Numerics;
 using FishNet;
 using FishNet.Object;
 
@@ -52,7 +47,8 @@ namespace XianXia
         [ServerRpc(RequireOwnership =false)]
         void Test1()
         {
-            FightServerClient.ConsoleWrite_Saber("双方开始交战！！！");
+#if UNITY_SERVER
+            FightServerManager.ConsoleWrite_Saber("双方开始交战！！！");
             GameManager.Instance.ChangeGameStatus(GameManagerBase.GameStatus.Starting);
             InstanceFinder.GetInstance<TimingSystemUI>().StartTimer(180, 30);
             UnitMainSystem mainSystem = GameManager.MainWorld.FindSystem<UnitMainSystem>();
@@ -80,6 +76,7 @@ namespace XianXia
 
                 mainSystem.SwapnUnit(unit);
             }
+#endif
         }
         private void Update()
         {

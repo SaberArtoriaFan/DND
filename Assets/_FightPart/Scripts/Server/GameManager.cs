@@ -64,7 +64,7 @@ namespace XianXia
             {
                 if (unitMainSystem.GetNumberUnitOfMine(v) > 0) return;
             }
-            FightServerClient.ConsoleWrite_Saber("Tigger Game over ，reason:UnitDead", System.ConsoleColor.DarkYellow);
+            FightServerManager.ConsoleWrite_Saber("Tigger Game over ，reason:UnitDead", System.ConsoleColor.DarkYellow);
             ChangeGameStatus(GameStatus.Finish);
         }
         protected override void Start()
@@ -91,18 +91,20 @@ namespace XianXia
 
             InstanceFinder.GetInstance<TimingSystemUI>().OnGameOver += () => ChangeGameStatus(GameStatus.Finish);
             InstanceFinder.GetInstance<NormalUtility>().OnStartAfterNetwork += StartAfterNetwork;
-            if (world != null && isPasuedWhenFinishGame) OnFinishGameEvent += () =>
+            OnFinishGameEvent += () =>
             {
-                FindSystem<UnitAttackSystem>()?.SetEnable(false);
-                FindSystem<UnitSpellSystem>()?.SetEnable(false);
-                UnitMoveSystem unitMoveSystem = FindSystem<UnitMoveSystem>();
-                unitMoveSystem?.SetEnable(false);
-                unitMoveSystem?.StopAll();
+                if ( world != null && isPasuedWhenFinishGame)
+                {
+                    FindSystem<UnitAttackSystem>()?.SetEnable(false);
+                    FindSystem<UnitSpellSystem>()?.SetEnable(false);
+                    UnitMoveSystem unitMoveSystem = FindSystem<UnitMoveSystem>();
+                    unitMoveSystem?.SetEnable(false);
+                    unitMoveSystem?.StopAll();
+                }
                 InstanceFinder.GetInstance<TimingSystemUI>().StopTimer();
-
+                TimerManager.instance.AddTimer(() => { FightServerManager.ConsoleWrite_Saber("GAME OVER"); InstanceFinder.ServerManager.StopConnection(true); }, 5f);
             };
 
-            TimerManager.instance.AddTimer(() => XianXiaControllerInit.Request_CloseApplication(new string[] { $"游戏已结束,结果为{GameManager.instance._GameResult}" }), 10);
 
 
 #if UNITY_SERVER
@@ -118,7 +120,7 @@ namespace XianXia
         public void StartAfterNetwork()
         {
             //联网后初始化
-            FightServerClient.ConsoleWrite_Saber("MainWord Init After Network ");
+            FightServerManager.ConsoleWrite_Saber("MainWord Init After Network ");
             MainWorld.StartAfterNetwork();
         }
 
@@ -127,7 +129,7 @@ namespace XianXia
             //判断时间，时间走完了就输
             if (TimingSystemUI.TimeRemaining == 0)
             {
-                FightServerClient.ConsoleWrite_Saber($"Because TimeRemaining is 0，player fail！", System.ConsoleColor.Yellow);
+                FightServerManager.ConsoleWrite_Saber($"Because TimeRemaining is 0，player fail！", System.ConsoleColor.Yellow);
                 return GameResult.Fail;
             }
 
@@ -145,14 +147,14 @@ namespace XianXia
             }
             if (isAlive)
             {
-                FightServerClient.ConsoleWrite_Saber($"Because fight win，player win！",System.ConsoleColor.Yellow);
+                FightServerManager.ConsoleWrite_Saber($"Because fight win，player win！",System.ConsoleColor.Yellow);
 
                 return GameResult.Success;
             }
  
             else
             {
-                FightServerClient.ConsoleWrite_Saber($"Because fight fail，player fail！", System.ConsoleColor.Yellow);
+                FightServerManager.ConsoleWrite_Saber($"Because fight fail，player fail！", System.ConsoleColor.Yellow);
                 return GameResult.Fail;
 
             }

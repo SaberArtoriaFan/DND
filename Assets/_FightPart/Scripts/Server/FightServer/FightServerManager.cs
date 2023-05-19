@@ -1,6 +1,7 @@
 using FishNet;
 using Proto;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,32 @@ namespace XianXia
 
         int processId;
         Process process;
+        string playerID;
+
+        public Action<string,ConsoleColor> OnConsloe;
+        public static void ConsoleWrite_Saber(string s, ConsoleColor color = default)
+        {
+            if(instance.OnConsloe!=null)
+                Instance.OnConsloe(s, color);
+            else
+            {
+#if UNITY_SERVER && !UNITY_EDITOR
+                        if (color==default||color == Console.ForegroundColor)
+                            Console.WriteLine("Saber:" + s+"\t"+ DateTime.Now);
+                        else
+                        {
+                            ConsoleColor origin = Console.ForegroundColor;
+                                Console.ForegroundColor = color;
+                            Console.WriteLine("Saber:" + s+"\t"+ DateTime.Now);
+                                Console.ForegroundColor = origin;
+
+                        }
+#elif UNITY_SERVER && UNITY_EDITOR
+                UnityEngine.Debug.Log(s);
+#endif
+            }
+
+        }
         public bool IsSocketActive => serverClient.IsActive;
         internal void SetFightIPAndPort(string ip,ushort port)
         {
@@ -32,14 +59,15 @@ namespace XianXia
         public string Fight_IP { get => fight_IP;  }
         public ushort Fight_Port { get => fight_Port; }
         public int ProcessId { get => processId; }
+        public string PlayerID { get => playerID; set => playerID = value; }
 
-//        public void QuitApplication()
-//        {
-//            FightServerClient.ConsoleWrite_Saber("Ask for Close this process");
-//#if !UNITY_EDITOR
-            
-//#endif
-//        }
+        //        public void QuitApplication()
+        //        {
+        //            FightServerClient.ConsoleWrite_Saber("Ask for Close this process");
+        //#if !UNITY_EDITOR
+
+        //#endif
+        //        }
 
         protected override void Awake()
         {
@@ -58,17 +86,27 @@ namespace XianXia
             processId = process.Id;
             serverClient.OnCloseSocketEvent += () =>
             {
-                FightServerClient.ConsoleWrite_Saber("Close Socket XIXI");
+                FightServerManager.ConsoleWrite_Saber("Close Socket XIXI");
 #if !UNITY_EDITOR
 
                 process.Kill();
 #endif
 
             };
-            serverClient.InitSocket("127.0.0.1", port);
 
-            FightServerClient.ConsoleWrite_Saber($"ProcessID:{processId}");
-            XianXiaControllerInit.Request_StartFightFishNetServer();
+            FightServerManager.ConsoleWrite_Saber($"ProcessID:{processId}");
+            serverClient.InitSocket("127.0.0.1", port);
+            XianXiaControllerInit.Request_Login();
+#if UNITY_EDITOR && UNITY_SERVER
+            MainPack mainPack = new MainPack();
+                mainPack.IpAndPortPack = new IPAndPortPack();
+                mainPack.IpAndPortPack.Ip = "a";
+                mainPack.IpAndPortPack.Port = 7070;
+                FightServerManager.ConsoleWrite_Saber("±à¼­Æ÷²âÊÔ");
+
+
+                XianXiaControllerInit.Respond_StartFightFishNetServer(mainPack);
+#endif
             //GameManager.NewInstance.OnFinishGameEvent += () =>
             //{
             //};
@@ -79,7 +117,7 @@ namespace XianXia
             //MainPack mainPack = null;
             //mainPack.HeroAndPosList.
 #endif
-            }
+        }
         private void Start()
         {
             StartWork();

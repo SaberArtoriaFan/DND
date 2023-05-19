@@ -1,8 +1,6 @@
 using JEngine.Core;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using XianXia;
@@ -20,6 +18,7 @@ public class PhoneTest : MonoBehaviour
         button.onClick.AddListener(ChangeMode);
         if (updater != null)
         {
+
 #if !UNITY_EDITOR&&UNITY_SERVER
             Console.WriteLine("StartServer Succ");
             updater.mode = Updater.UpdateMode.Standalone;
@@ -30,7 +29,9 @@ public class PhoneTest : MonoBehaviour
 #else
             updater.mode = Updater.UpdateMode.Simulate;
 #endif
-            FightServerClient.ConsoleWrite_Saber($"热更新模式:{updater.mode.ToString()}");
+#if UNITY_SERVER
+            FightServerManager.ConsoleWrite_Saber($"热更新模式:{updater.mode.ToString()}");
+#endif
             updater.StartUpdate();
         }
 

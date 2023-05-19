@@ -35,7 +35,7 @@ namespace XianXia
                         b.Init(this);
                     }
 
-                    FightServerClient.ConsoleWrite_Saber($"{b.ActionCode}Method was register");
+                    FightServerManager.ConsoleWrite_Saber($"{b.ActionCode}Method was register");
                 }
             }
 
@@ -67,7 +67,7 @@ namespace XianXia
                 while (packList.Count > 0)
                 {
                     MainPack pack = packList.Dequeue();
-                    FightServerClient.ConsoleWrite_Saber($"在处理{pack.ActionCode}");
+                    FightServerManager.ConsoleWrite_Saber($"在处理{pack.ActionCode}");
                     if (allController.ContainsKey(pack.ActionCode))
                     {
                         allController[pack.ActionCode].Respond(pack);
@@ -95,19 +95,19 @@ namespace XianXia
             {
                 if (isAdd)
                 {
-                    FightServerClient.ConsoleWrite_Saber($"成功添加{actionCode}响应处理方法{respondHandle.ToString()}！");
+                    FightServerManager.ConsoleWrite_Saber($"成功添加{actionCode}响应处理方法{respondHandle.ToString()}！");
                     allController[actionCode].RespondAction += respondHandle;
 
                 }
                 else
                 {
-                    FightServerClient.ConsoleWrite_Saber($"成功移除{actionCode}响应处理方法{respondHandle.ToString()}！");
+                    FightServerManager.ConsoleWrite_Saber($"成功移除{actionCode}响应处理方法{respondHandle.ToString()}！");
                     allController[actionCode].RespondAction -= respondHandle;
 
                 }
             }
             else
-                FightServerClient.ConsoleWrite_Saber($"尝试添加不存在的指令{actionCode}！");
+                FightServerManager.ConsoleWrite_Saber($"尝试添加不存在的指令{actionCode}！");
 
         }
         void ResultHandle(ActionCode actionCode, ReturnCode returnCode, Action<MainPack> handle,bool isAdd)
@@ -120,7 +120,7 @@ namespace XianXia
                         allController[actionCode].SuccessAction += handle;
                     else if (returnCode == ReturnCode.Fail)
                         allController[actionCode].FailAction += handle;
-                    FightServerClient.ConsoleWrite_Saber($"成功添加{actionCode}指令{returnCode}处理方法{handle.ToString()}！");
+                    FightServerManager.ConsoleWrite_Saber($"成功添加{actionCode}指令{returnCode}处理方法{handle.ToString()}！");
 
                 }
                 else
@@ -129,13 +129,13 @@ namespace XianXia
                         allController[actionCode].SuccessAction -= handle;
                     else if (returnCode == ReturnCode.Fail)
                         allController[actionCode].FailAction -= handle;
-                    FightServerClient.ConsoleWrite_Saber($"成功移除{actionCode}指令{returnCode}处理方法{handle.ToString()}！");
+                    FightServerManager.ConsoleWrite_Saber($"成功移除{actionCode}指令{returnCode}处理方法{handle.ToString()}！");
                 }
 
 
             }
             else
-                FightServerClient.ConsoleWrite_Saber($"尝试添加不存在的指令{actionCode}！");
+                FightServerManager.ConsoleWrite_Saber($"尝试添加不存在的指令{actionCode}！");
 
         }
         internal void Send(MainPack mainPack)
